@@ -11,9 +11,9 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout, Flatten
 from keras.layers.convolutional import Conv2D, AveragePooling2D
 from keras.utils import np_utils
-from keras.utils.generic_utils import get_custom_objects
 from keras import backend as K
 K.set_image_dim_ordering
+import square_act
 
 
 # initialize random # generator to a constant
@@ -39,21 +39,13 @@ y_test = np_utils.to_categorical(y_test)
 num_classes = y_test.shape[1]
 
 
-# activation function for squaring a number
-def square_activation(x):
-    return x**2
-
-# add square activation function to keras
-get_custom_objects().update({'square_activation': Activation(square_activation)})
-
-
 # now we can make the neural network
 # define the baseline model
 def baseline_model():
     # create model
     model = Sequential()
     model.add(Conv2D(32, (5,5), input_shape=(28,28,1)))
-    model.add(Activation(square_activation))
+    model.add(Activation(square_act.square_activation))
     model.add(AveragePooling2D(pool_size=(2,2)))
     # Dropout helps prevent overfitting
     model.add(Dropout(0.2))
