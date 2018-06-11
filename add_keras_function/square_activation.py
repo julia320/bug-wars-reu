@@ -8,7 +8,8 @@ Created on Thu Jun  7 16:09:26 2018
 import numpy
 from keras.datasets import mnist
 from keras.models import Sequential
-from keras.layers import Dense, Activation
+from keras.layers import Dense, Activation, Dropout, Flatten
+from keras.layers.convolutional import Conv2D, AveragePooling2D
 from keras.utils import np_utils
 from keras.utils.generic_utils import get_custom_objects
 from keras import backend as K
@@ -26,8 +27,6 @@ numpy.random.seed(seed)
 # reshape the images to 28x28
 X_train = X_train.reshape(X_train.shape[0], 28,28,1).astype('float32')
 X_test = X_test.reshape(X_test.shape[0], 28,28,1).astype('float32')
-y_train = y_train.reshape(y_train.shape[0], 28,28,1).astype('float32')
-y_test = y_test.reshape(y_test.shape[0], 28,28,1).astype('float32')
 
 # normalize inputs from 0-225 to 0-1
 X_train = X_train/255
@@ -53,10 +52,12 @@ get_custom_objects().update({'square_activation': Activation(square_activation)}
 def baseline_model():
     # create model
     model = Sequential()
-    model.add(Dense(32, input_shape=(28,28,1)))
+    model.add(Conv2D(32, (5,5), input_shape=(28,28,1)))
     model.add(Activation(square_activation))
-    print("using the square activation!")
-    
+    model.add(AveragePooling2D(pool_size=(2,2)))
+    # Dropout helps prevent overfitting
+    model.add(Dropout(0.2))
+    model.add(Flatten())
     model.add(Dense(num_classes))
     model.add(Activation('softmax'))
     # compile the model
@@ -67,11 +68,6 @@ def baseline_model():
 model = baseline_model()
 
 # fit the model
-print(X_train.shape)
-print(X_test.shape)
-print(y_train.shape)
-print(y_test.shape)
-
 model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=20, batch_size=200, verbose=1)
 
 # save the model
