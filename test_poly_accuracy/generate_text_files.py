@@ -17,49 +17,63 @@ import polynomials
 
 # load data
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
-# find the number of output classes
+
+# flatten 28*28 images to a 784 vector for each image
+num_pixels = X_train.shape[1] * X_train.shape[2]
+X_train = X_train.reshape(X_train.shape[0], num_pixels).astype('float32')
+X_test = X_test.reshape(X_test.shape[0], num_pixels).astype('float32')
+
+# normalize inputs from 0-255 to 0-1
+X_train = X_train / 255
+X_test = X_test / 255
+
+# one hot encode outputs
+y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
 num_classes = y_test.shape[1]
 
+
+# ask for the file path they want
+message = "Where would you like these files located? (Enter the full path, no slashes at the end): "
+path = input(message)
+wrong_count = 0
+while not os.path.exists(path):
+    wrong_count+=1
+    if wrong_count > 2:
+        print("Here is an example of an acceptable path: C:\\Users\\Julia\\Code\\Bug Wars")
+    path = input("That was not a valid path, please try again: ")
 
 # make the list of polynomials
 activations = polynomials.polynomials
 for act in activations:
     # make a folder for each polynomial
-    path = "C:\\Users\\Julia\\Code\\Bug Wars\\bug-wars-reu\\test-poly-accuracy\\" + str(act)
-    directory = os.path.dirname(path)
-    if os.path.exists(path) == False:
-        os.mkdir(path)
+    file_path = path + "\\" + str(act)
+    if not os.path.exists(file_path):
+        os.mkdir(file_path)
     
     # navigate to the folder just created
-    os.chdir(path)
+    os.chdir(file_path)
     
     # make text files 
-    # each file needs an input and output layer and a FC layer with i nodes
+    # each file needs a FC layer with i nodes and an output layer
     for i in range(100):
         # create the file
-        file_name = str(act) + "_" + str(i) + ".txt"
+        file_name = str(act) + "_" + str(i+1) + ".txt"
         file = open(file_name, "w+")
         
-        # write the input Conv2D layer to the file
-        file.write("Conv2D\t32\t5,5")
-        # write the activation function
-        file.write("\nActiv\t" + str(act))
-        # write the fully connected layer with i nodes
-        file.write("\nDense\t" + str(i))
-        # write another activation layer 
-        file.write("\nActiv\t" + str(act))
-        # write the output layer 
-        file.write("\nDense\t10")
-        # write the final activation layer
+        # model.add(Dense(i, input_dim=num_pixels, kernel_initializer='normal', activation='polynomial'))
+        file.write("Dense\t" + str(i+1) + "\t" + str(num_pixels) + "\tini=normal")
+        file.write("\nActiv\tpolynomials." + str(act))
+        # model.add(Dense(num_classes, kernel_initializer='normal', activation='softmax')) 
+        file.write("\nDense\t" + str(num_classes) + "\tini=normal")
         file.write("\nActiv\tsoftmax")
         
-        print(file_name + " was created!")
+        print("File " + file_name + " was created!")
         
         # close the file
         file.close()
     
     # reset the directory path
-    os.chdir("C:\\Users\\Julia\\Code\\Bug Wars\\bug-wars-reu\\test-poly-accuracy")
+    os.chdir(path)
     
 print("All folders and text files created.")
