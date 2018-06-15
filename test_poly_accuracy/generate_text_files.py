@@ -41,7 +41,7 @@ while not os.path.exists(path):
     wrong_count+=1
     if wrong_count > 2:
         print("Here is an example of an acceptable path: C:\\Users\\Julia\\Code\\Bug Wars")
-    path = input("That was not a valid path, please try again: ")
+    path = input("That path does not exist on your computer, please try again: ")
 
 # make the list of polynomials
 activations = polynomials.polynomials
@@ -62,8 +62,8 @@ for act in activations:
         file = open(file_name, "w+")
         
         # model.add(Dense(i, input_dim=num_pixels, kernel_initializer='normal', activation='polynomial'))
-        file.write("Dense\t" + str(i+1) + "\t" + str(num_pixels) + "\tini=normal")
-        file.write("\nActiv\tpolynomials." + str(act))
+        file.write("Dense\t" + str(i+1) + "\tidm=" + str(num_pixels) + "\tini=normal")
+        file.write("\nActiv\t" + str(act))
         # model.add(Dense(num_classes, kernel_initializer='normal', activation='softmax')) 
         file.write("\nDense\t" + str(num_classes) + "\tini=normal")
         file.write("\nActiv\tsoftmax")
