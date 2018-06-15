@@ -1,4 +1,4 @@
-Dense	13	784	ini=normal
-Activ	polynomials.polyReLUInteg98
+Dense	13	idm=784	ini=normal
+Activ	polyReLUInteg98
 Dense	10	ini=normal
 Activ	softmax
