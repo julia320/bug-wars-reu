@@ -20,7 +20,7 @@ while not os.path.exists(file_path):
         print("Here is an example of an acceptable path: C:\\Users\\Julia\\Bug Wars\\example.txt")
     file_path = input("That file does not exist, please try again: ")
 
-model_name = input("Enter a name for the saved model: ") + ".h5"
+model_name = input("Enter a name for the saved model (no extension needed): ") + ".h5"
     
 
 def run_model ():
