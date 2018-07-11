@@ -34,14 +34,14 @@ num_classes = y_test.shape[1]
 
 
 # ask for the file path they want
-message = "Where would you like these files located? (Enter the full path, no slashes at the end): "
+message = "Where do you want these files stored? (Enter the full path, no slashes at the end): "
 path = input(message)
 wrong_count = 0
 while not os.path.exists(path):
     wrong_count+=1
-    if wrong_count > 2:
-        print("Here is an example of an acceptable path: C:\\Users\\Julia\\Code\\Bug Wars")
     path = input("That path does not exist on your computer, please try again: ")
+	if wrong_count > 2:
+        print("Here is an example of an acceptable path: C:\\Users\\Julia\\REU")
 
 # make the list of polynomials
 activations = polynomials.polynomials
