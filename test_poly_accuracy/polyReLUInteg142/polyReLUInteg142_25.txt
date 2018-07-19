@@ -1,4 +1,0 @@
-Dense	25	idm=784	ini=normal
-Activ	polyReLUInteg142
-Dense	10	ini=normal
-Activ	softmax
